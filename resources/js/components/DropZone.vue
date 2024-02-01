@@ -16,20 +16,30 @@
         />
 
         <label for="fileInput" class="file-label text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-image"
-                 viewBox="0 0 16 16">
-                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"/>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="50"
+                height="50"
+                fill="currentColor"
+                class="bi bi-image"
+                viewBox="0 0 16 16"
+            >
+                <path d="M6.002 5.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z" />
                 <path
-                    d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"/>
+                    d="M2.002 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-12zm12 1a1 1 0 0 1 1 1v6.5l-3.777-1.947a.5.5 0 0 0-.577.093l-3.71 3.71-2.66-1.772a.5.5 0 0 0-.63.062L1.002 12V3a1 1 0 0 1 1-1h12z"
+                />
             </svg>
             <div v-if="isDragging">Release to drop files here.</div>
-            <div v-else>Drop files here or <u>click here</u> to upload.</div>
+            <div v-else>Drop files here or <u>click here</u> to uploa.</div>
         </label>
 
         <div class="preview-container mt-4" v-if="thumbnail || modelValue">
             <div :key="thumbnail.name" class="preview-card">
                 <div>
-                    <img class="preview-img" :src="generateThumbnail(thumbnail)"/>
+                    <img
+                        class="preview-img"
+                        :src="generateThumbnail(thumbnail)"
+                    />
                     <p :title="thumbnail.name">
                         {{ makeName(thumbnail.name) }}
                     </p>
@@ -51,35 +61,35 @@
 </template>
 
 <script setup>
-import {onMounted, ref, watch} from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps({
-    modelValue: String
+    modelValue: String,
 });
 
-const thumbnail = ref('')
-const isDragging = ref(false)
-const refFiles = ref(null)
+const thumbnail = ref("");
+const isDragging = ref(false);
+const refFiles = ref(null);
 
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
-const onChange = (() => {
+const onChange = () => {
     thumbnail.value = refFiles.value.files;
-})
+};
 
-const generateThumbnail = ((file) => {
+const generateThumbnail = (file) => {
     if (props.modelValue) {
-        return props.modelValue
-    } else  {
+        return props.modelValue;
+    } else {
         let fileSrc = URL.createObjectURL(file);
         setTimeout(() => {
             URL.revokeObjectURL(fileSrc);
         }, 1000);
         return fileSrc;
     }
-})
+};
 
-const makeName = ((name) => {
+const makeName = (name) => {
     if (!props.modelValue) {
         return (
             name.split(".")[0].substring(0, 3) +
@@ -87,31 +97,31 @@ const makeName = ((name) => {
             name.split(".")[name.split(".").length - 1]
         );
     }
-})
+};
 
-const remove = ((i) => {
-    thumbnail.value = ""
-})
+const remove = (i) => {
+    thumbnail.value = "";
+};
 
-const dragover = ((e) => {
+const dragover = (e) => {
     e.preventDefault();
     isDragging.value = true;
-})
+};
 
-const dragleave = (() => {
+const dragleave = () => {
     isDragging.value = false;
-})
+};
 
-const drop = ((e) => {
+const drop = (e) => {
     e.preventDefault();
     refFiles.value.files = e.dataTransfer.files;
     onChange();
     isDragging.value = false;
-})
+};
 
 watch(thumbnail, () => {
-    emit('update:modelValue', thumbnail.value[0])
-})
+    emit("update:modelValue", thumbnail.value[0]);
+});
 
 /*export default {
     props: ['thefile'],
