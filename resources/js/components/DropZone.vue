@@ -30,7 +30,7 @@
                 />
             </svg>
             <div v-if="isDragging">Release to drop files here.</div>
-            <div v-else>Drop files here or <u>click here</u> to uploa.</div>
+            <div v-else>Drop files here or <u>click here</u> to upload.</div>
         </label>
 
         <div class="preview-container mt-4" v-if="thumbnail || modelValue">
